@@ -1,0 +1,296 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Woqal Restaurant Management Dashboard Design System */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* Pure white background */
+    --foreground: 26 10% 10%; /* --text-dark: #1a1a1a */
+
+    --card: 0 0% 100%; /* --card-bg: #ffffff */
+    --card-foreground: 26 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 26 10% 10%;
+
+    /* Barter King Brand Colors - Green & Gold */
+    --primary: 142 47% 20%; /* --primary-color: #1a472a */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --primary-glow: 142 47% 30%;
+
+    --secondary: 142 35% 37%; /* --secondary-color: #2d6a4f */
+    --secondary-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222.2 84% 4.9%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --muted: 0 0% 96%; /* Lighter muted background */
+    --muted-foreground: 0 0% 45%; /* Slightly lighter text */
+
+    --accent: 38 60% 68%; /* --accent-color: #d4a574 */
+    --accent-foreground: 142 47% 20%; /* --primary-color: #1a472a */
+
+    --border: 0 0% 90%; /* Slightly darker border for better visibility on white */
+    --input: 0 0% 90%;
+    --ring: 142 47% 20%; /* Primary color ring for better focus states */
+
+    /* Modern gradients and effects */
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(142 47% 20%),
+      hsl(142 35% 37%)
+    );
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 99%));
+    --shadow-glow: 0 0 40px hsl(142 47% 20% / 0.15);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Tab animation variables */
+    --tab-underline-color: hsl(142 47% 20%);
+    --tab-slide-duration: 0.3s;
+    --tab-fade-duration: 0.2s;
+
+    /* Coin color */
+    --coin-color: 48 100% 50%; /* #ffd700 */
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 174 72% 56%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 174 72% 56%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --primary-glow: 174 72% 70%;
+
+    --secondary: 220 14% 15%;
+    --secondary-foreground: 210 40% 98%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222.2 84% 4.9%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --muted: 220 14% 15%;
+    --muted-foreground: 220 9% 65%;
+
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    --border: 220 13% 25%;
+    --input: 220 13% 25%;
+    --ring: 174 72% 56%;
+
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(174 72% 56%),
+      hsl(174 72% 70%)
+    );
+    --gradient-card: linear-gradient(
+      145deg,
+      hsl(222.2 84% 4.9%),
+      hsl(220 14% 20%)
+    );
+    --shadow-glow: 0 0 40px hsl(174 72% 56% / 0.3);
+    --shadow-card: 0 4px 6px -1px hsl(0 0% 0% / 0.1),
+      0 2px 4px -1px hsl(0 0% 0% / 0.06);
+
+    --sidebar-background: 222.2 84% 4.9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 174 72% 56%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 220 13% 25%;
+    --sidebar-ring: 174 72% 56%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Animated Tab Styles */
+  .animated-tabs .tabs-list {
+    @apply relative bg-muted p-1 rounded-lg;
+  }
+
+  .animated-tabs .tabs-trigger {
+    @apply relative z-10 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm transition-all duration-200;
+  }
+
+  .animated-tabs .tabs-trigger::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-primary transform scale-x-0 transition-transform duration-300 ease-in-out;
+  }
+
+  .animated-tabs .tabs-trigger[data-state="active"]::after {
+    @apply scale-x-100;
+  }
+
+  .animated-tabs .tabs-content {
+    @apply animate-fade-in;
+    animation: slideInFade var(--tab-slide-duration)
+      cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer utilities {
+  @keyframes slideInFade {
+    0% {
+      opacity: 0;
+      transform: translateX(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .tab-content-enter {
+    animation: slideInFade var(--tab-slide-duration)
+      cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn var(--tab-fade-duration)
+      cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Hide scrollbar while maintaining scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
+  /* Custom scrollbar styles for better UX */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground)) hsl(var(--muted));
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground));
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--foreground));
+  }
+
+  /* Enhanced shadow for white background */
+  .shadow-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .shadow-card-hover:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Subtle background patterns for visual interest on white */
+  .bg-subtle-pattern {
+    background-color: hsl(var(--muted));
+    background-image: linear-gradient(
+        30deg,
+        hsl(var(--border)) 12%,
+        transparent 12.5%,
+        transparent 87%,
+        hsl(var(--border)) 87.5%,
+        hsl(var(--border))
+      ),
+      linear-gradient(
+        150deg,
+        hsl(var(--border)) 12%,
+        transparent 12.5%,
+        transparent 87%,
+        hsl(var(--border)) 87.5%,
+        hsl(var(--border))
+      ),
+      linear-gradient(
+        30deg,
+        hsl(var(--border)) 12%,
+        transparent 12.5%,
+        transparent 87%,
+        hsl(var(--border)) 87.5%,
+        hsl(var(--border))
+      ),
+      linear-gradient(
+        150deg,
+        hsl(var(--border)) 12%,
+        transparent 12.5%,
+        transparent 87%,
+        hsl(var(--border)) 87.5%,
+        hsl(var(--border))
+      );
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px;
+  }
+
+  /* Gradient overlay for sections */
+  .section-gradient {
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--background)),
+      hsl(var(--muted) / 0.3),
+      hsl(var(--background))
+    );
+  }
+}

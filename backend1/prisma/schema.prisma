@@ -1,0 +1,152 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  password   String
+  profession String?
+  skills     String[] @default([])
+  coins      Int      @default(100)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  posts                 Post[]          @relation("UserPosts")
+  requests              Request[]       @relation("UserRequests")
+  receivedRequests      Request[]       @relation("PostOwnerRequests")
+  tradesAsProvider      Trade[]         @relation("ProviderTrades")
+  tradesAsSeeker        Trade[]         @relation("SeekerTrades")
+  chatMessages          ChatMessage[]   @relation("UserChatMessages")
+  conversationsAsUserA  Conversation[]  @relation("ConversationParticipantA")
+  conversationsAsUserB  Conversation[]  @relation("ConversationParticipantB")
+
+  @@map("users")
+}
+
+enum PostCategory {
+  SKILLS
+  SERVICES
+  WORK
+  ITEMS
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum TradeStatus {
+  IN_PROGRESS
+  PROVIDER_COMPLETED
+  SEEKER_COMPLETED
+  COMPLETED
+  CANCELLED
+}
+
+model Post {
+  id                  String       @id @default(cuid())
+  userId              String
+  category            PostCategory
+  offeringDescription String       @db.Text
+  seekingDescription  String       @db.Text
+  location            String
+  tradeValue          Int
+  isActive            Boolean      @default(true)
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+
+  user          User           @relation("UserPosts", fields: [userId], references: [id], onDelete: Cascade)
+  requests      Request[]
+  conversations Conversation[] @relation("PostConversations")
+
+  @@map("posts")
+}
+
+model Request {
+  id                String        @id @default(cuid())
+  postId            String
+  requesterId       String
+  postOwnerId       String
+  offeredValue      Int
+  requestedValue    Int
+  message           String?       @db.Text
+  status            RequestStatus @default(PENDING)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  post      Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  requester User    @relation("UserRequests", fields: [requesterId], references: [id], onDelete: Cascade)
+  postOwner User    @relation("PostOwnerRequests", fields: [postOwnerId], references: [id], onDelete: Cascade)
+  trade     Trade?
+
+  @@map("requests")
+}
+
+model Trade {
+  id                   String      @id @default(cuid())
+  requestId            String      @unique
+  providerId           String
+  seekerId             String
+  providerValue        Int
+  seekerValue          Int
+  status               TradeStatus @default(IN_PROGRESS)
+  providerCompleted    Boolean     @default(false)
+  seekerCompleted      Boolean     @default(false)
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  completedAt          DateTime?
+
+  request  Request @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  provider User    @relation("ProviderTrades", fields: [providerId], references: [id], onDelete: Cascade)
+  seeker   User    @relation("SeekerTrades", fields: [seekerId], references: [id], onDelete: Cascade)
+
+  @@map("trades")
+}
+
+model Conversation {
+  id             String   @id @default(cuid())
+  postId         String?
+  participantAId String
+  participantBId String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  post         Post? @relation("PostConversations", fields: [postId], references: [id], onDelete: Cascade)
+  participantA User  @relation("ConversationParticipantA", fields: [participantAId], references: [id], onDelete: Cascade)
+  participantB User  @relation("ConversationParticipantB", fields: [participantBId], references: [id], onDelete: Cascade)
+  messages     ChatMessage[]
+
+  @@index([postId])
+  @@index([participantAId])
+  @@index([participantBId])
+  @@map("conversations")
+}
+
+model ChatMessage {
+  id             String   @id @default(cuid())
+  conversationId String
+  senderId       String
+  text           String   @db.Text
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User        @relation("UserChatMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId], map: "chat_messages_conversation_id_idx")
+  @@index([senderId], map: "chat_messages_sender_id_idx")
+  @@map("chat_messages")
+}
