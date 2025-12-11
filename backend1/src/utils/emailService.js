@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.BREVO_SMTP_USER || "9b726c001@smtp-brevo.com",
     pass:
       process.env.BREVO_SMTP_KEY ||
-      "xsmtpsib-2348a8514da12117aeb643ffbf39ee7f41df00135f5bf77e81d32c8eb5f5c7f9-sPQru53wdAXVNBBw",
+      "",
   },
 });
 
